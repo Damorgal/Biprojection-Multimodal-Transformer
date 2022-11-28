@@ -194,6 +194,30 @@ class GatedMultimodalLayerFeatures(nn.Module):
         
         return z*h1*xs[0] + (1-z)*h2*xs[1], torch.cat((z, (1-z)), dim=-1)
 
+class TextShifting3Layer(nn.Module):
+    """ Layer inspired by 'Gated multimodal networks, Arevalo1 et al.' (https://arxiv.org/abs/1702.01992) """
+    def __init__(self, size_in1, size_in2, size_in3, size_in4, size_out):
+        super(TextShifting3Layer, self).__init__()
+        self.size_in1, self.size_in2, self.size_in3, self.size_out = size_in1, size_in2, size_in3, size_out
+        
+        self.hidden1 = nn.Linear(size_in1, size_out, bias=False)
+        self.hidden2 = nn.Linear(size_in2, size_out, bias=False)
+        self.hidden3 = nn.Linear(size_in3, size_out, bias=False)
+        self.x1_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4, size_out, bias=False)
+        self.x2_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4, size_out, bias=False)
+        self.x3_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4, size_out, bias=False)
+
+    def forward(self, xs):
+        h1 = torch.tanh(self.hidden1(xs[0]))
+        h2 = torch.tanh(self.hidden2(xs[1]))
+        h3 = torch.tanh(self.hidden3(xs[2]))
+        x_cat = torch.cat(xs, dim=-1)
+        z1 = torch.sigmoid(self.x1_gate(x_cat))
+        z2 = torch.sigmoid(self.x2_gate(x_cat))
+        z3 = torch.sigmoid(self.x3_gate(x_cat))
+
+        return z1*h1 + z2*h2 + z3*h3, torch.cat((z1, z2, z3), dim=-1)  
+
 class TextShifting4Layer(nn.Module):
     """ Layer inspired by 'Gated multimodal networks, Arevalo1 et al.' (https://arxiv.org/abs/1702.01992) """
     def __init__(self, size_in1, size_in2, size_in3, size_in4, size_out):
@@ -221,39 +245,6 @@ class TextShifting4Layer(nn.Module):
         z4 = torch.sigmoid(self.x4_gate(x_cat))
 
         return z1*h1 + z2*h2 + z3*h3 + z4*h4, torch.cat((z1, z2, z3, z4), dim=-1)
-
-class TextShifting5Layer(nn.Module):
-    """ Layer inspired by 'Gated multimodal networks, Arevalo1 et al.' (https://arxiv.org/abs/1702.01992) """
-    def __init__(self, size_in1, size_in2, size_in3, size_in4, size_in5, size_out):
-        super(TextShifting5Layer, self).__init__()
-        self.size_in1, self.size_in2, self.size_in3, self.size_in4, self.size_in5, self.size_out = size_in1, size_in2, size_in3, size_in4, size_in5, size_out
-        
-        self.hidden1 = nn.Linear(size_in1, size_out, bias=False)
-        self.hidden2 = nn.Linear(size_in2, size_out, bias=False)
-        self.hidden3 = nn.Linear(size_in3, size_out, bias=False)
-        self.hidden4 = nn.Linear(size_in4, size_out, bias=False)
-        self.hidden5 = nn.Linear(size_in5, size_out, bias=False)
-        self.x1_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4+size_in5, size_out, bias=False)
-        self.x2_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4+size_in5, size_out, bias=False)
-        self.x3_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4+size_in5, size_out, bias=False)
-        self.x4_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4+size_in5, size_out, bias=False)
-        self.x5_gate = nn.Linear(size_in1+size_in2+size_in3+size_in4+size_in5, size_out, bias=False)
-
-    def forward(self, x1, x2, x3, x4, x5):
-        h1 = F.tanh(self.hidden1(x1))
-        h2 = F.tanh(self.hidden2(x2))
-        h3 = F.tanh(self.hidden3(x3))
-        h4 = F.tanh(self.hidden4(x4))
-        h5 = F.tanh(self.hidden5(x5))
-        x_cat = torch.cat((x1, x2, x3, x4, x5), dim=1)
-        z1 = F.sigmoid(self.x1_gate(x_cat))
-        z2 = F.sigmoid(self.x2_gate(x_cat))
-        z3 = F.sigmoid(self.x3_gate(x_cat))
-        z4 = F.sigmoid(self.x4_gate(x_cat))
-        z5 = F.sigmoid(self.x5_gate(x_cat))
-
-        return z1*h1 + z2*h2 + z3*h3 + z4*h4 + z5*h5, torch.cat((z1, z2, z3, z4, z5), dim=1)
-
 
 class TextShiftingNLayer(nn.Module):
     """ Layer inspired by 'Gated multimodal networks, Arevalo1 et al.' (https://arxiv.org/abs/1702.01992) """
@@ -578,7 +569,7 @@ class MultiprojectionMMTransformerGMUClf(nn.Module):
         
         
         if self.hybrid:
-            last_hs, z = self.gmu(last_h_l, last_h_v, last_h_a, poster, last_h_early)
+            last_hs, z = self.gmu([last_h_l, last_h_v, last_h_a, poster, last_h_early])
         else:
             last_hs, z = self.gmu([last_h_l, last_h_v, last_h_a, poster])
        
@@ -861,9 +852,9 @@ class MultiprojectionMMTransformer3DGMUClf(nn.Module):
             last_h_v = last_hs = h_vs_gmu[0] + h_vs_gmu[-1]
         
         if self.hybrid:
-            last_hs, z = self.gmu(last_h_l, last_h_v, last_h_a, last_h_early)
+            last_hs, z = self.gmu([last_h_l, last_h_v, last_h_a, last_h_early])
         else:
-            last_hs, z = self.gmu(last_h_l, last_h_v, last_h_a)
+            last_hs, z = self.gmu([last_h_l, last_h_v, last_h_a])
         
         # A residual block
         last_hs_proj = self.proj2(F.dropout(F.relu(self.proj1(last_hs)), p=self.out_dropout, training=self.training))

@@ -33,20 +33,20 @@ Command example to run the training script on Moviescope:
 Command example to run the training script on MM-IMDb:
 
 ```
->> python3 mmbt/train.py --from_seed 1  --model mmtrvapt --batch_sz 6 --gradient_accumulation_steps 6 --savedir /home/User/BPMulT_mmimdb_examplePath --data_path /home/User/datasets --task mmimdb --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 6 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 6 --orig_d_v 300 --orig_d_a 1
+>> python3 bpmult/train.py --from_seed 1  --model mmtrvapt --batch_sz 6 --gradient_accumulation_steps 6 --savedir /home/User/BPMulT_mmimdb_examplePath --data_path /home/User/datasets --task mmimdb --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 6 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 6 --orig_d_v 300 --orig_d_a 1
 
 ```
 
 Command example to run the training script on CMU-MOSEI:
 
 ```
->> python3 mmbt/train.py --from_seed 1  --model mmtrvat --batch_sz 8 --gradient_accumulation_steps 8 --savedir /home/User/BPMulT_cmu-mosei_examplePath --data_path /home/User/datasets --task cmu-mosei --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 5 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 12 --nlevels 8 --layers 8 --orig_d_v 35 --orig_d_a 74 --hidden_sz 300
+>> python3 bpmult/train.py --from_seed 1  --model mmtrvat --batch_sz 8 --gradient_accumulation_steps 8 --savedir /home/User/BPMulT_cmu-mosei_examplePath --data_path /home/User/datasets --task cmu-mosei --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 5 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 12 --nlevels 8 --layers 8 --orig_d_v 35 --orig_d_a 74 --hidden_sz 300
 ```
 
 Command example to run the training script on IEMOCAP:
 
 ```
->> python3 mmbt/train.py --from_seed 1  --model mmtrvat --batch_sz 8 --gradient_accumulation_steps 8 --savedir /home/User/BPMulT_iemocap_examplePath --data_path /home/User/datasets --task iemocap --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 5 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 12 --nlevels 8 --layers 8 --orig_d_v 35 --orig_d_a 74 --hidden_sz 300
+>> python3 bpmult/train.py --from_seed 1  --model mmtrvat --batch_sz 8 --gradient_accumulation_steps 8 --savedir /home/User/BPMulT_iemocap_examplePath --data_path /home/User/datasets --task iemocap --visual both --task_type multilabel --num_image_embeds 3 --lr_patience 2 --patience 5 --dropout 0.1 --lr 5e-5 --warmup 0.1 --max_epochs 100  --num_heads 12 --nlevels 8 --layers 8 --orig_d_v 35 --orig_d_a 74 --hidden_sz 300
 ```
 
 ## Related works:

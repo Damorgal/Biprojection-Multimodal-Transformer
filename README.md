@@ -18,9 +18,9 @@ We propose a novel multimodal-transformer-based architecture (BPMulT), which is 
 
 ## Publications
 
-This repo contains the code used for the preprint version of a publication in submission to Elsevier Information Fusion [Biprojection Multimodal Transformer (BPMulT) for Multimodal Data Classification](https://github.com/Damorgal/BS-Thesis-Statistical-Analysis-Agavin-prebiotics/blob/main/BS_Thesis_DiegoAMG.pdf)
+This repo contains the code used for the preprint version of a publication in submission to Elsevier Information Fusion [Biprojection Multimodal Transformer (BPMulT) for Multimodal Data Classification](https://github.com/Damorgal/Biprojection-Multimodal-Transformer/blob/main/Biprojection_Multimodal_Transformer_PaperDraft.pdf)
 
-The paper above is a polished version of my MS degree [Thesis](https://github.com/Damorgal/BS-Thesis-Statistical-Analysis-Agavin-prebiotics/blob/main/BS_Thesis_DiegoAMG.pdf). If you want to see more details about our research, we recommend to see the thesis doc. 
+The paper above is a polished version of my MS degree [Thesis](https://github.com/Damorgal/Biprojection-Multimodal-Transformer/blob/main/CIMAT_Master_Thesis.pdf). If you want to see more details about our research, we recommend to see the thesis doc. 
 
 ## Usage
 
